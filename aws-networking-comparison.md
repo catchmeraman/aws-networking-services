@@ -4,6 +4,33 @@
 
 This document compares three key AWS networking services and provides strategies for reducing database latency across accounts, VPCs, and on-premises environments.
 
+## Architecture Diagrams
+
+### 1. AWS Transit Gateway Architecture
+![Transit Gateway Architecture](generated-diagrams/transit-gateway-architecture.png)
+
+**Traditional hub-and-spoke network architecture for VPC-to-VPC and on-premises connectivity.**
+
+### 2. AWS VPC Lattice Architecture  
+![VPC Lattice Architecture](generated-diagrams/vpc-lattice-architecture.png)
+
+**Service mesh architecture for application-layer connectivity with service discovery.**
+
+### 3. AWS Cloud WAN Architecture
+![Cloud WAN Architecture](generated-diagrams/cloud-wan-architecture.png)
+
+**Global network management with policy-driven connectivity across regions.**
+
+### 4. Latency Optimization Comparison
+![Latency Optimization](generated-diagrams/latency-optimization-comparison.png)
+
+**Before vs After: Traditional architecture compared to optimized solution.**
+
+### 5. Recommended Hybrid Architecture
+![Hybrid Architecture](generated-diagrams/hybrid-architecture-recommended.png)
+
+**Optimal solution combining Transit Gateway and VPC Lattice for your use case.**
+
 ## Service Overview
 
 ### AWS Transit Gateway
