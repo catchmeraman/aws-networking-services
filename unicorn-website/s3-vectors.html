@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS S3 Vectors - Document Storage & Search</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav {
+            background: #f8fafc;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .nav a {
+            color: #4f46e5;
+            text-decoration: none;
+            margin-right: 2rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav a:hover {
+            color: #7c3aed;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section h2 {
+            color: #1e293b;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section h3 {
+            color: #334155;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #4f46e5;
+        }
+        
+        .feature-card h4 {
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+            margin: 1rem 0;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦄 AWS S3 Vectors</h1>
+            <p>Cost-Optimized Vector Storage for Document Search & AI Applications</p>
+        </div>
+        
+        <div class="nav">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📋 About</a>
+            <a href="reports.html">📊 Reports</a>
+            <a href="cost-report.html">💰 Cost Analysis</a>
+            <a href="s3-vectors.html">🔍 S3 Vectors</a>
+            <a href="s3-vectors-implementation.html">📋 Implementation Guide</a>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>Overview</h2>
+                <p>Amazon S3 Vectors is a preview feature that provides purpose-built, cost-optimized vector storage for semantic search and AI applications. It reduces vector storage and querying costs by up to 90% compared to traditional vector databases.</p>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">90%</div>
+                        <div>Cost Reduction</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">&lt;1s</div>
+                        <div>Query Response</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">384</div>
+                        <div>Vector Dimensions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div>Sample Documents</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Key Components</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🗂️ Vector Buckets</h4>
+                        <p>Purpose-built S3 bucket type specifically designed for storing and querying vectors with optimal performance.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📊 Vector Indexes</h4>
+                        <p>Organizational structures within vector buckets for managing and querying vector data efficiently.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔢 Vector Embeddings</h4>
+                        <p>Numerical representations of documents that preserve semantic relationships for similarity search.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏷️ Metadata Filtering</h4>
+                        <p>Rich metadata support with filtering capabilities for precise document retrieval.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Implementation Demo</h2>
+                <p>We've created a complete document vector storage system with the following components:</p>
+                
+                <h3>📄 Sample Documents Stored</h3>
+                <ul>
+                    <li><strong>annual_report_2024.pdf</strong> - Financial report with revenue growth data</li>
+                    <li><strong>product_manual.docx</strong> - Product documentation and installation guide</li>
+                    <li><strong>meeting_notes.pdf</strong> - Executive meeting notes and action items</li>
+                </ul>
+                
+                <h3>🔍 Search Capabilities</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Semantic Search</h4>
+                        <p>Find documents by meaning, not just keywords. Uses cosine similarity for relevance ranking.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Metadata Filtering</h4>
+                        <p>Filter by document type, department, author, year, and other attributes.</p>
+                    </div>
+                </div>
+                
+                <div class="highlight">
+                    <strong>💡 Demo Results:</strong> Successfully stored 3 document embeddings with 384-dimensional vectors in S3 bucket <code>my-vector-documents-bucket</code>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Code Implementation</h2>
+                
+                <h3>Document Storage Script</h3>
+                <div class="code-block">
+# Create sample document embeddings
+embeddings = storage.create_sample_embeddings()
+
+# Store in S3 with metadata
+storage.store_embeddings_s3(embeddings)
+
+# Create searchable index
+storage.create_vector_index_metadata(embeddings)
+                </div>
+                
+                <h3>Query Implementation</h3>
+                <div class="code-block">
+# Semantic search
+results = query_engine.search_similar_documents(
+    "financial report revenue", top_k=3
+)
+
+# Metadata filtering
+finance_docs = query_engine.filter_by_metadata({
+    "document_type": "financial_report"
+})
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Use Cases</h2>
+                <ul>
+                    <li><strong>Medical Imaging:</strong> Find similarities across millions of medical images</li>
+                    <li><strong>Copyright Detection:</strong> Identify derivative content in media libraries</li>
+                    <li><strong>Enterprise Search:</strong> Semantic search across corporate documents</li>
+                    <li><strong>Video Understanding:</strong> Search for specific scenes within video content</li>
+                    <li><strong>Personalization:</strong> Deliver tailored recommendations</li>
+                    <li><strong>Image Deduplication:</strong> Remove duplicate images from collections</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>AWS Service Integrations</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🔍 Amazon OpenSearch</h4>
+                        <p>Export to OpenSearch Serverless for high-performance search or use S3 Vectors as storage engine</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🧠 Amazon Bedrock</h4>
+                        <p>Native integration with Bedrock Knowledge Bases for RAG applications</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Production Deployment</h2>
+                <p>When S3 Vectors becomes fully available, use these commands:</p>
+                
+                <div class="code-block">
+# Create vector bucket
+aws s3vectors create-vector-bucket --bucket-name my-vectors
+
+# Create vector index  
+aws s3vectors create-vector-index --bucket-name my-vectors --index-name documents
+
+# Upload vectors
+aws s3vectors put-vectors --bucket-name my-vectors --index-name documents
+
+# Query vectors
+aws s3vectors query-vectors --bucket-name my-vectors --index-name documents
+                </div>
+                
+                <div class="highlight">
+                    <strong>🚀 Ready for Migration:</strong> Our current implementation structure is fully compatible with S3 Vectors format for seamless migration when the service becomes available in your region.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

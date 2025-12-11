@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Cost Analysis Report - CloudOps Insights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .nav {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .nav a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .report-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            opacity: 0.9;
+        }
+
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .cost-table th,
+        .cost-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cost-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .cost-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .highlight {
+            background-color: #e8f5e8;
+            padding: 1rem;
+            border-left: 4px solid #27ae60;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .recommendations {
+            background-color: #fff3cd;
+            padding: 1rem;
+            border-left: 4px solid #ffc107;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 2rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦄 AWS Cost Analysis Report</h1>
+            <p>Comprehensive cost analysis for CloudOps Insights infrastructure</p>
+            <p><strong>Analysis Period:</strong> April 2024 - October 2024</p>
+        </div>
+
+        <div class="nav">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">👨‍💻 About Me</a>
+            <a href="reports.html">📊 Reports</a>
+            <a href="cost-report.html">💰 Cost Analysis</a>
+            <a href="s3-vectors.html">🔍 S3 Vectors</a>
+        </div>
+
+        <div class="report-section">
+            <h2>📈 Executive Summary</h2>
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>$16.52</h3>
+                    <p>Total 7-Month Cost</p>
+                </div>
+                <div class="card">
+                    <h3>$14.00</h3>
+                    <p>Domain Registration</p>
+                </div>
+                <div class="card">
+                    <h3>&lt;$0.001</h3>
+                    <p>Avg Monthly Operational</p>
+                </div>
+                <div class="card">
+                    <h3>85%</h3>
+                    <p>Cost from Domain</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>Key Finding:</strong> Excellent cost control with 85% of costs from one-time domain registration. Monthly operational costs are essentially zero, demonstrating effective use of AWS free tier.
+            </div>
+        </div>
+
+        <div class="report-section">
+            <h2>💰 Monthly Cost Breakdown</h2>
+            <table class="cost-table">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Total Cost</th>
+                        <th>Primary Services</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>April 2024</td>
+                        <td>$16.52</td>
+                        <td>Domain Registration, S3, EC2</td>
+                        <td>Domain registration + tax</td>
+                    </tr>
+                    <tr>
+                        <td>May 2024</td>
+                        <td>&lt;$0.001</td>
+                        <td>S3 Storage</td>
+                        <td>Minimal storage costs</td>
+                    </tr>
+                    <tr>
+                        <td>June 2024</td>
+                        <td>&lt;$0.001</td>
+                        <td>S3 Storage</td>
+                        <td>Consistent low usage</td>
+                    </tr>
+                    <tr>
+                        <td>July 2024</td>
+                        <td>&lt;$0.001</td>
+                        <td>S3 Storage</td>
+                        <td>Stable costs</td>
+                    </tr>
+                    <tr>
+                        <td>August 2024</td>
+                        <td>&lt;$0.001</td>
+                        <td>S3 Storage</td>
+                        <td>Continued efficiency</td>
+                    </tr>
+                    <tr>
+                        <td>September 2024</td>
+                        <td>&lt;$0.001</td>
+                        <td>S3 Storage</td>
+                        <td>Optimal usage</td>
+                    </tr>
+                    <tr>
+                        <td>October 2024</td>
+                        <td>&lt;$0.001</td>
+                        <td>S3, ECS, ELB</td>
+                        <td>Slight increase in services</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-section">
+            <h2>🌍 Regional Distribution</h2>
+            <h3>Primary Regions</h3>
+            <ul>
+                <li><strong>us-east-1 (N. Virginia):</strong> Primary workload region - S3, data transfer, compute services</li>
+                <li><strong>Global/NoRegion:</strong> Domain registration, Route 53, tax charges</li>
+                <li><strong>ap-south-1 (Mumbai):</strong> Minimal S3 storage usage</li>
+            </ul>
+        </div>
+
+        <div class="report-section">
+            <h2>🔧 Top Services by Cost</h2>
+            <table class="cost-table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Cost</th>
+                        <th>Region</th>
+                        <th>Usage Pattern</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Amazon Registrar</td>
+                        <td>$14.00</td>
+                        <td>Global</td>
+                        <td>One-time domain registration</td>
+                    </tr>
+                    <tr>
+                        <td>Tax</td>
+                        <td>$2.52</td>
+                        <td>NoRegion</td>
+                        <td>Tax on domain registration</td>
+                    </tr>
+                    <tr>
+                        <td>EC2 - Other</td>
+                        <td>$0.43</td>
+                        <td>us-east-1</td>
+                        <td>Elastic IP or other EC2 resources</td>
+                    </tr>
+                    <tr>
+                        <td>Amazon S3</td>
+                        <td>~$0.0003/month</td>
+                        <td>us-east-1</td>
+                        <td>Consistent minimal storage</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-section">
+            <h2>✅ Cost Optimization Status</h2>
+            <div class="recommendations">
+                <h3>Current Optimizations</h3>
+                <ul>
+                    <li>✅ Effective use of AWS Free Tier</li>
+                    <li>✅ Minimal data transfer costs</li>
+                    <li>✅ No unnecessary compute charges</li>
+                    <li>✅ Efficient resource cleanup</li>
+                    <li>✅ CloudTrail enabled across regions (free tier)</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Recommendations</h3>
+                <ul>
+                    <li><strong>Set up AWS Budgets:</strong> Alerts at $5, $10, and $25 thresholds</li>
+                    <li><strong>Enable Cost Anomaly Detection:</strong> Monitor unusual spending patterns</li>
+                    <li><strong>S3 Lifecycle Policies:</strong> Implement for any growing storage</li>
+                    <li><strong>Monthly Reviews:</strong> Continue monitoring for unexpected charges</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <h2>📊 Conclusion</h2>
+            <p>Your AWS infrastructure demonstrates <strong>excellent cost control</strong> with minimal monthly expenses after the initial domain registration. The setup is ideal for:</p>
+            <ul>
+                <li>Development and testing environments</li>
+                <li>Low-traffic applications like this unicorn website</li>
+                <li>Learning and experimentation</li>
+                <li>Cost-conscious cloud adoption</li>
+            </ul>
+            
+            <div class="highlight">
+                <strong>Bottom Line:</strong> $16.52 total cost over 7 months with 85% being one-time domain registration. Average monthly operational cost of less than $0.001 showcases optimal AWS resource management.
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Report generated on October 22, 2024 | Data source: AWS Cost Explorer API</p>
+            <p>CloudOps Insights - Optimizing cloud costs with precision 🦄</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+FROM nginx:alpine
+COPY index.html /usr/share/nginx/html/
+COPY about.html /usr/share/nginx/html/
+COPY reports.html /usr/share/nginx/html/
+COPY cost-report.html /usr/share/nginx/html/
+COPY s3-vectors.html /usr/share/nginx/html/
+COPY s3-vectors-implementation.html /usr/share/nginx/html/
+EXPOSE 80

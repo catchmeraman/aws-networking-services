@@ -1,0 +1,55 @@
+EKS Unicorn Website Architecture
+
+┌─────────────────────────────────────────────────────────────────┐
+│                        Internet Users                            │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │ HTTPS Traffic
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Route 53 DNS                                 │
+│              eksawsweek2.cloudopsinsights.com                   │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              Application Load Balancer (ALB)                    │
+│                    Internet-facing                              │
+│              ┌─────────────────────────────┐                   │
+│              │     ACM SSL Certificate     │                   │
+│              │   (HTTPS Termination)       │                   │
+│              └─────────────────────────────┘                   │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │ HTTP to Pods
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Amazon EKS Cluster                          │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                  Control Plane                          │   │
+│  │              (Managed by AWS)                           │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                              │                                 │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                  Worker Nodes                           │   │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │   │
+│  │  │    Pod 1    │  │    Pod 2    │  │   Pod N     │     │   │
+│  │  │ Nginx:Alpine│  │ Nginx:Alpine│  │ Nginx:Alpine│     │   │
+│  │  │   Port 80   │  │   Port 80   │  │   Port 80   │     │   │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘     │   │
+│  │                                                         │   │
+│  │  Service: unicorn-website-service (ClusterIP)          │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────────┐
+│              Amazon ECR Repository                              │
+│           114805761158.dkr.ecr.us-east-1.amazonaws.com        │
+│                  /unicorn-website:latest                       │
+└─────────────────────────────────────────────────────────────────┘
+
+Components:
+- EKS Cluster: unicorn-cluster
+- ALB: Internet-facing with SSL termination
+- ACM Certificate: eksawsweek2.cloudopsinsights.com
+- ECR Repository: Container image storage
+- Kubernetes Service: ClusterIP load balancing
+- Pods: 2 replicas for high availability

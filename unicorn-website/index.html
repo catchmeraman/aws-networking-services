@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unicorn Website - CloudOps Insights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 2rem;
+        }
+        
+        .unicorn {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .aws-logo {
+            color: #ff9900;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .footer {
+            margin-top: 2rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .resources {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .resources h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .resource-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .resource-btn {
+            display: block;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .resource-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="unicorn">🦄</div>
+        <h1>Welcome to Unicorn Website</h1>
+        <p class="subtitle">Powered by <span class="aws-logo">AWS Amplify</span></p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>🚀 Fast</h3>
+                <p>Lightning-fast deployment</p>
+            </div>
+            <div class="feature">
+                <h3>🔒 Secure</h3>
+                <p>HTTPS by default</p>
+            </div>
+            <div class="feature">
+                <h3>📱 Responsive</h3>
+                <p>Works on all devices</p>
+            </div>
+            <div class="feature">
+                <h3>☁️ Scalable</h3>
+                <p>Auto-scaling CDN</p>
+            </div>
+        </div>
+        
+        <div class="resources">
+            <h2>📊 Project Resources</h2>
+            <div class="resource-links">
+                <a href="./about.html" class="resource-btn">
+                    👨‍💻 About Me
+                </a>
+                <a href="./reports.html" class="resource-btn">
+                    📊 View All Reports
+                </a>
+                <a href="./cost-report.html" class="resource-btn">
+                    💰 Cost Analysis Report
+                </a>
+                <a href="./s3-vectors.html" class="resource-btn">
+                    🔍 S3 Vectors Demo
+                </a>
+                <a href="./s3-vectors-implementation.html" class="resource-btn">
+                    📋 S3 Vectors Implementation Guide
+                </a>
+                <a href="https://github.com/catchmeraman/awsweek2.0" target="_blank" class="resource-btn">
+                    📁 Source Code
+                </a>
+                <a href="https://github.com/catchmeraman/awsweek2.0/blob/main/amplify-cost-analysis.md" target="_blank" class="resource-btn">
+                    💰 Cost Analysis
+                </a>
+                <a href="https://github.com/catchmeraman/awsweek2.0/blob/main/main.tf" target="_blank" class="resource-btn">
+                    🏗️ Terraform Code
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Deployed on AWS Amplify | CloudOps Insights</p>
+            <p>Built with ❤️ using Terraform</p>
+        </div>
+    </div>
+</body>
+</html>

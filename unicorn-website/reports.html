@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Reports - Unicorn Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .unicorn {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .nav a {
+            display: inline-block;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav a:hover {
+            background: #764ba2;
+        }
+        
+        .report-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .report-section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .cost-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .cost-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .cost-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .architecture-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .deployment-steps {
+            counter-reset: step-counter;
+        }
+        
+        .deployment-step {
+            counter-increment: step-counter;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            position: relative;
+            padding-left: 3rem;
+        }
+        
+        .deployment-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            background: #667eea;
+            color: white;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="unicorn">🦄</div>
+            <h1>Project Reports & Documentation</h1>
+            <p>Complete analysis and deployment guide for the Unicorn Website</p>
+        </div>
+        
+        <div class="nav">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">👨‍💻 About Me</a>
+            <a href="cost-report.html">💰 Cost Report</a>
+            <a href="s3-vectors.html">🔍 S3 Vectors</a>
+            <a href="#architecture">🏗️ Architecture</a>
+            <a href="#cost">💰 Cost Analysis</a>
+            <a href="#deployment">🚀 Deployment</a>
+            <a href="#code">📁 Source Code</a>
+        </div>
+        
+        <div id="architecture" class="report-section">
+            <h2>🏗️ Architecture Overview</h2>
+            <p>The unicorn website uses a modern serverless architecture on AWS:</p>
+            <img src="amplify-unicorn-architecture.png" alt="Architecture Diagram" class="architecture-img">
+            <ul>
+                <li><strong>AWS Amplify:</strong> Static website hosting with CI/CD</li>
+                <li><strong>CloudFront:</strong> Global CDN for fast content delivery</li>
+                <li><strong>Route 53:</strong> DNS management for custom domain</li>
+                <li><strong>ACM:</strong> Free SSL certificate management</li>
+                <li><strong>GitHub:</strong> Source code repository with automated deployments</li>
+            </ul>
+        </div>
+        
+        <div id="cost" class="report-section">
+            <h2>💰 Cost Analysis</h2>
+            <div class="cost-summary">
+                <div class="cost-item">
+                    <div class="cost-amount">$2.00</div>
+                    <div>Total Monthly Cost</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-amount">$1.50</div>
+                    <div>AWS Amplify</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-amount">$0.50</div>
+                    <div>Route 53</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-amount">$0.00</div>
+                    <div>SSL Certificate</div>
+                </div>
+            </div>
+            
+            <h3>Free Tier Benefits</h3>
+            <ul>
+                <li>First 12 months: 1,000 build minutes free</li>
+                <li>First 12 months: 15GB data transfer free</li>
+                <li>SSL certificates always free for AWS services</li>
+            </ul>
+            
+            <h3>Cost Breakdown</h3>
+            <ul>
+                <li><strong>Data Transfer:</strong> $0.15 per GB (10GB = $1.50)</li>
+                <li><strong>Build Minutes:</strong> $0.01 per minute (5 builds = $0.05)</li>
+                <li><strong>Storage:</strong> $0.023 per GB (1GB = $0.023)</li>
+                <li><strong>Route 53 Hosted Zone:</strong> $0.50/month</li>
+            </ul>
+        </div>
+        
+        <div id="deployment" class="report-section">
+            <h2>🚀 Deployment Guide</h2>
+            <div class="deployment-steps">
+                <div class="deployment-step">
+                    <h3>Clone Repository</h3>
+                    <div class="code-block">git clone https://github.com/catchmeraman/awsweek2.0.git<br>cd awsweek2.0</div>
+                </div>
+                
+                <div class="deployment-step">
+                    <h3>AWS Amplify Console</h3>
+                    <p>Go to AWS Amplify Console and connect your GitHub repository</p>
+                </div>
+                
+                <div class="deployment-step">
+                    <h3>Configure Build Settings</h3>
+                    <div class="code-block">version: 1<br>frontend:<br>  phases:<br>    build:<br>      commands:<br>        - mkdir -p dist<br>        - cp index.html dist/<br>  artifacts:<br>    baseDirectory: dist<br>    files:<br>      - '**/*'</div>
+                </div>
+                
+                <div class="deployment-step">
+                    <h3>Deploy</h3>
+                    <p>Amplify will automatically build and deploy your website</p>
+                </div>
+                
+                <div class="deployment-step">
+                    <h3>Custom Domain (Optional)</h3>
+                    <p>Add your custom domain in Amplify console and configure DNS</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="code" class="report-section">
+            <h2>📁 Source Code & Resources</h2>
+            <div class="cost-summary">
+                <div class="cost-item">
+                    <a href="https://github.com/catchmeraman/awsweek2.0" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="cost-amount">📁</div>
+                        <div>GitHub Repository</div>
+                    </a>
+                </div>
+                <div class="cost-item">
+                    <a href="https://github.com/catchmeraman/awsweek2.0/blob/main/main.tf" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="cost-amount">🏗️</div>
+                        <div>Terraform Code</div>
+                    </a>
+                </div>
+                <div class="cost-item">
+                    <a href="https://github.com/catchmeraman/awsweek2.0/blob/main/amplify-cost-analysis.md" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="cost-amount">📊</div>
+                        <div>Detailed Report</div>
+                    </a>
+                </div>
+                <div class="cost-item">
+                    <a href="https://github.com/catchmeraman/awsweek2.0/blob/main/README.md" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="cost-amount">📖</div>
+                        <div>Documentation</div>
+                    </a>
+                </div>
+            </div>
+            
+            <h3>Key Files</h3>
+            <ul>
+                <li><strong>index.html:</strong> Main website file</li>
+                <li><strong>main.tf:</strong> Terraform infrastructure code</li>
+                <li><strong>variables.tf:</strong> Configuration variables</li>
+                <li><strong>outputs.tf:</strong> Terraform outputs</li>
+                <li><strong>package.json:</strong> Build configuration</li>
+                <li><strong>deploy.sh:</strong> Deployment script</li>
+            </ul>
+        </div>
+        
+        <div class="report-section">
+            <h2>🎯 Next Steps</h2>
+            <ol>
+                <li>Deploy the infrastructure using Terraform or AWS Console</li>
+                <li>Connect your GitHub repository to Amplify</li>
+                <li>Configure custom domain (optional)</li>
+                <li>Monitor costs and usage</li>
+                <li>Customize the website content</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
