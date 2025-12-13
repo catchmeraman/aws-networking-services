@@ -21,6 +21,17 @@
         .option { margin: 10px 0; padding: 10px; border: 2px solid #ddd; border-radius: 5px; cursor: pointer; }
         .option:hover { background: #f0f0f0; }
         .option.selected { border-color: #00684A; background: #e8f5e8; }
+        .option.correct { border-color: #28a745; background: #d4edda; color: #155724; }
+        .option.incorrect { border-color: #dc3545; background: #f8d7da; color: #721c24; }
+        .explanation { 
+            margin: 20px 0; 
+            padding: 15px; 
+            background: #e8f5e8; 
+            border-left: 4px solid #00684A; 
+            border-radius: 5px;
+            font-style: italic;
+        }
+        .explanation h4 { color: #00684A; margin-bottom: 10px; }
         .score { text-align: center; font-size: 24px; color: #00684A; margin: 20px 0; }
         .leaderboard { margin-top: 20px; }
         .leaderboard table { width: 100%; border-collapse: collapse; }
@@ -80,6 +91,10 @@
                     <h3 id="questionText"></h3>
                     <div id="questionNumber" style="color: #666; margin-bottom: 15px;"></div>
                     <div id="optionsContainer" class="options"></div>
+                    <div id="explanationContainer" class="explanation hidden">
+                        <h4>Explanation:</h4>
+                        <p id="explanationText"></p>
+                    </div>
                     <button id="nextButton" onclick="nextQuestion()" style="width: auto;">Next Question</button>
                 </div>
             </div>
@@ -129,57 +144,67 @@
     </div>
 
     <script>
-        // Quiz questions
+        // Quiz questions with explanations
         const questions = [
             {
                 question: "What is MongoDB Atlas?",
                 options: ["A local database", "A cloud database service", "A programming language", "A web framework"],
-                correct: 1
+                correct: 1,
+                explanation: "MongoDB Atlas is a fully managed cloud database service that handles deployment, management, and scaling of MongoDB databases across AWS, Azure, and Google Cloud."
             },
             {
                 question: "Which deployment option is NOT available in MongoDB Atlas?",
                 options: ["Serverless", "Dedicated", "Shared", "On-premises only"],
-                correct: 3
+                correct: 3,
+                explanation: "MongoDB Atlas is a cloud-only service. While you can run MongoDB on-premises, Atlas specifically provides Serverless, Dedicated, and Shared cloud deployment options."
             },
             {
                 question: "What is a MongoDB replica set?",
                 options: ["A backup copy", "A group of MongoDB instances", "A query language", "A storage engine"],
-                correct: 1
+                correct: 1,
+                explanation: "A replica set is a group of MongoDB instances that maintain the same data set, providing redundancy and high availability through automatic failover."
             },
             {
                 question: "Which MongoDB Atlas feature provides real-time analytics?",
                 options: ["Atlas Search", "Atlas Charts", "Atlas Data Lake", "Atlas Triggers"],
-                correct: 1
+                correct: 1,
+                explanation: "Atlas Charts provides real-time analytics and visualization capabilities, allowing you to create dashboards and charts directly from your MongoDB data."
             },
             {
                 question: "What is the default port for MongoDB?",
                 options: ["3306", "5432", "27017", "8080"],
-                correct: 2
+                correct: 2,
+                explanation: "MongoDB uses port 27017 as its default port. This is different from MySQL (3306), PostgreSQL (5432), or HTTP (8080)."
             },
             {
                 question: "Which query language does MongoDB use?",
                 options: ["SQL", "MQL (MongoDB Query Language)", "GraphQL", "NoSQL"],
-                correct: 1
+                correct: 1,
+                explanation: "MongoDB uses MQL (MongoDB Query Language), which is a rich query language that supports CRUD operations, aggregation, text search, and geospatial queries."
             },
             {
                 question: "What is sharding in MongoDB?",
                 options: ["Data encryption", "Horizontal scaling", "Vertical scaling", "Data compression"],
-                correct: 1
+                correct: 1,
+                explanation: "Sharding is MongoDB's approach to horizontal scaling, distributing data across multiple machines to handle large datasets and high throughput operations."
             },
             {
                 question: "Which Atlas feature helps with full-text search?",
                 options: ["Atlas Search", "Atlas Realm", "Atlas Charts", "Atlas Triggers"],
-                correct: 0
+                correct: 0,
+                explanation: "Atlas Search provides full-text search capabilities using Apache Lucene, allowing you to build rich search experiences with features like autocomplete, faceting, and relevance scoring."
             },
             {
                 question: "What is the maximum document size in MongoDB?",
                 options: ["1MB", "16MB", "32MB", "64MB"],
-                correct: 1
+                correct: 1,
+                explanation: "MongoDB has a maximum document size limit of 16MB. This limit helps ensure that documents don't use excessive RAM and provides reasonable performance for network transmission."
             },
             {
                 question: "Which programming languages have official MongoDB drivers?",
                 options: ["Only JavaScript", "Only Python", "Multiple languages including Java, Python, Node.js", "Only Java"],
-                correct: 2
+                correct: 2,
+                explanation: "MongoDB provides official drivers for many programming languages including Java, Python, Node.js, C#, Go, Ruby, PHP, and more, making it accessible across different technology stacks."
             }
         ];
 
@@ -299,14 +324,41 @@
                 optionsContainer.appendChild(optionDiv);
             });
 
+            // Reset explanation display
+            document.getElementById('explanationContainer').classList.add('hidden');
             selectedAnswer = null;
-            document.getElementById('nextButton').textContent = 'Next Question';
+            document.getElementById('nextButton').textContent = 'Select an Answer';
         }
 
         function selectOption(index, element) {
+            if (selectedAnswer !== null) return; // Prevent changing answer after selection
+            
             document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             selectedAnswer = index;
+            
+            // Show correct/incorrect styling and explanation
+            const question = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((opt, i) => {
+                if (i === question.correct) {
+                    opt.classList.add('correct');
+                } else if (i === index && i !== question.correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            // Show explanation
+            document.getElementById('explanationText').textContent = question.explanation;
+            document.getElementById('explanationContainer').classList.remove('hidden');
+            
+            // Update button text
+            if (currentQuestion === questions.length - 1) {
+                document.getElementById('nextButton').textContent = 'Finish Quiz';
+            } else {
+                document.getElementById('nextButton').textContent = 'Next Question';
+            }
         }
 
         function nextQuestion() {
