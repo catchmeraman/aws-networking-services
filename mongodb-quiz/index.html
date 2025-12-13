@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB Atlas Quiz</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #00684A, #00A86B); min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .card { background: white; border-radius: 10px; padding: 30px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .hidden { display: none; }
+        h1 { color: #00684A; text-align: center; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, button { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        button { background: #00684A; color: white; cursor: pointer; border: none; margin-top: 10px; }
+        button:hover { background: #005A3F; }
+        .question { margin-bottom: 20px; }
+        .options { margin: 15px 0; }
+        .option { margin: 10px 0; padding: 10px; border: 2px solid #ddd; border-radius: 5px; cursor: pointer; }
+        .option:hover { background: #f0f0f0; }
+        .option.selected { border-color: #00684A; background: #e8f5e8; }
+        .score { text-align: center; font-size: 24px; color: #00684A; margin: 20px 0; }
+        .leaderboard { margin-top: 20px; }
+        .leaderboard table { width: 100%; border-collapse: collapse; }
+        .leaderboard th, .leaderboard td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        .leaderboard th { background: #00684A; color: white; }
+        .admin-panel { background: #f8f9fa; border-left: 4px solid #dc3545; }
+        .error { color: #dc3545; margin-top: 10px; }
+        .success { color: #28a745; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="card">
+            <h1>MongoDB Atlas Quiz</h1>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" id="username" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="password" placeholder="Enter password">
+            </div>
+            <button onclick="login()">Login</button>
+            <button onclick="showRegister()" style="background: #6c757d;">Register New User</button>
+            <div id="loginError" class="error"></div>
+        </div>
+
+        <!-- Registration Screen -->
+        <div id="registerScreen" class="card hidden">
+            <h1>Register New User</h1>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" id="regUsername" placeholder="Choose username">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="regPassword" placeholder="Choose password">
+            </div>
+            <button onclick="register()">Register</button>
+            <button onclick="showLogin()" style="background: #6c757d;">Back to Login</button>
+            <div id="registerError" class="error"></div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="card hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1>MongoDB Atlas Quiz</h1>
+                <div>
+                    <span>Welcome, <strong id="currentUser"></strong></span>
+                    <button onclick="logout()" style="width: auto; margin-left: 10px; background: #dc3545;">Logout</button>
+                </div>
+            </div>
+            
+            <div id="questionContainer">
+                <div class="question">
+                    <h3 id="questionText"></h3>
+                    <div id="questionNumber" style="color: #666; margin-bottom: 15px;"></div>
+                    <div id="optionsContainer" class="options"></div>
+                    <button id="nextButton" onclick="nextQuestion()" style="width: auto;">Next Question</button>
+                </div>
+            </div>
+
+            <div id="resultsContainer" class="hidden">
+                <h2>Quiz Complete!</h2>
+                <div class="score" id="finalScore"></div>
+                <button onclick="restartQuiz()">Take Quiz Again</button>
+                <button onclick="showDashboard()" style="background: #17a2b8;">View Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboardScreen" class="card hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1>Leaderboard</h1>
+                <div>
+                    <button onclick="showQuiz()" style="width: auto; background: #28a745;">Back to Quiz</button>
+                    <button onclick="logout()" style="width: auto; margin-left: 10px; background: #dc3545;">Logout</button>
+                </div>
+            </div>
+            
+            <div class="leaderboard">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th>Best Score</th>
+                            <th>Total Attempts</th>
+                            <th>Last Played</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Admin Panel -->
+            <div id="adminPanel" class="admin-panel card hidden">
+                <h3>Admin Panel</h3>
+                <p>Reset all scores and statistics</p>
+                <button onclick="resetAllScores()" style="background: #dc3545;">Reset All Scores</button>
+                <div id="adminMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz questions
+        const questions = [
+            {
+                question: "What is MongoDB Atlas?",
+                options: ["A local database", "A cloud database service", "A programming language", "A web framework"],
+                correct: 1
+            },
+            {
+                question: "Which deployment option is NOT available in MongoDB Atlas?",
+                options: ["Serverless", "Dedicated", "Shared", "On-premises only"],
+                correct: 3
+            },
+            {
+                question: "What is a MongoDB replica set?",
+                options: ["A backup copy", "A group of MongoDB instances", "A query language", "A storage engine"],
+                correct: 1
+            },
+            {
+                question: "Which MongoDB Atlas feature provides real-time analytics?",
+                options: ["Atlas Search", "Atlas Charts", "Atlas Data Lake", "Atlas Triggers"],
+                correct: 1
+            },
+            {
+                question: "What is the default port for MongoDB?",
+                options: ["3306", "5432", "27017", "8080"],
+                correct: 2
+            },
+            {
+                question: "Which query language does MongoDB use?",
+                options: ["SQL", "MQL (MongoDB Query Language)", "GraphQL", "NoSQL"],
+                correct: 1
+            },
+            {
+                question: "What is sharding in MongoDB?",
+                options: ["Data encryption", "Horizontal scaling", "Vertical scaling", "Data compression"],
+                correct: 1
+            },
+            {
+                question: "Which Atlas feature helps with full-text search?",
+                options: ["Atlas Search", "Atlas Realm", "Atlas Charts", "Atlas Triggers"],
+                correct: 0
+            },
+            {
+                question: "What is the maximum document size in MongoDB?",
+                options: ["1MB", "16MB", "32MB", "64MB"],
+                correct: 1
+            },
+            {
+                question: "Which programming languages have official MongoDB drivers?",
+                options: ["Only JavaScript", "Only Python", "Multiple languages including Java, Python, Node.js", "Only Java"],
+                correct: 2
+            }
+        ];
+
+        // Application state
+        let currentUser = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let users = JSON.parse(localStorage.getItem('quizUsers') || '{}');
+        let scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+
+        // Initialize admin user
+        if (!users['admin']) {
+            users['admin'] = 'admin123';
+            localStorage.setItem('quizUsers', JSON.stringify(users));
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.card').forEach(card => card.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function showLogin() {
+            showScreen('loginScreen');
+            document.getElementById('loginError').textContent = '';
+        }
+
+        function showRegister() {
+            showScreen('registerScreen');
+            document.getElementById('registerError').textContent = '';
+        }
+
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                document.getElementById('loginError').textContent = 'Please enter both username and password';
+                return;
+            }
+
+            if (users[username] && users[username] === password) {
+                currentUser = username;
+                document.getElementById('currentUser').textContent = username;
+                showQuiz();
+            } else {
+                document.getElementById('loginError').textContent = 'Invalid username or password';
+            }
+        }
+
+        function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            
+            if (!username || !password) {
+                document.getElementById('registerError').textContent = 'Please enter both username and password';
+                return;
+            }
+
+            if (users[username]) {
+                document.getElementById('registerError').textContent = 'Username already exists';
+                return;
+            }
+
+            users[username] = password;
+            localStorage.setItem('quizUsers', JSON.stringify(users));
+            document.getElementById('registerError').innerHTML = '<span class="success">Registration successful! You can now login.</span>';
+            
+            setTimeout(() => {
+                showLogin();
+                document.getElementById('username').value = username;
+            }, 1500);
+        }
+
+        function logout() {
+            currentUser = null;
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showLogin();
+        }
+
+        function showQuiz() {
+            showScreen('quizScreen');
+            startQuiz();
+        }
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            document.getElementById('questionContainer').classList.remove('hidden');
+            document.getElementById('resultsContainer').classList.add('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            selectedAnswer = null;
+            document.getElementById('nextButton').textContent = 'Next Question';
+        }
+
+        function selectOption(index, element) {
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedAnswer = index;
+        }
+
+        function nextQuestion() {
+            if (selectedAnswer === null) {
+                alert('Please select an answer');
+                return;
+            }
+
+            if (selectedAnswer === questions[currentQuestion].correct) {
+                score++;
+            }
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('questionContainer').classList.add('hidden');
+            document.getElementById('resultsContainer').classList.remove('hidden');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = `You scored ${score}/${questions.length} (${percentage}%)`;
+            
+            saveScore();
+        }
+
+        function saveScore() {
+            if (!scores[currentUser]) {
+                scores[currentUser] = {
+                    bestScore: 0,
+                    totalAttempts: 0,
+                    lastPlayed: null
+                };
+            }
+
+            scores[currentUser].totalAttempts++;
+            scores[currentUser].lastPlayed = new Date().toLocaleString();
+            
+            if (score > scores[currentUser].bestScore) {
+                scores[currentUser].bestScore = score;
+            }
+
+            localStorage.setItem('quizScores', JSON.stringify(scores));
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+
+        function showDashboard() {
+            showScreen('dashboardScreen');
+            loadLeaderboard();
+            
+            // Show admin panel if user is admin
+            if (currentUser === 'admin') {
+                document.getElementById('adminPanel').classList.remove('hidden');
+            } else {
+                document.getElementById('adminPanel').classList.add('hidden');
+            }
+        }
+
+        function loadLeaderboard() {
+            const leaderboardBody = document.getElementById('leaderboardBody');
+            leaderboardBody.innerHTML = '';
+
+            const sortedUsers = Object.entries(scores)
+                .sort(([,a], [,b]) => b.bestScore - a.bestScore)
+                .slice(0, 10);
+
+            sortedUsers.forEach(([username, data], index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${username}</td>
+                    <td>${data.bestScore}/${questions.length}</td>
+                    <td>${data.totalAttempts}</td>
+                    <td>${data.lastPlayed || 'Never'}</td>
+                `;
+                leaderboardBody.appendChild(row);
+            });
+
+            if (sortedUsers.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="5" style="text-align: center;">No scores yet</td>';
+                leaderboardBody.appendChild(row);
+            }
+        }
+
+        function resetAllScores() {
+            if (currentUser !== 'admin') {
+                document.getElementById('adminMessage').innerHTML = '<span class="error">Access denied</span>';
+                return;
+            }
+
+            if (confirm('Are you sure you want to reset all scores? This cannot be undone.')) {
+                scores = {};
+                localStorage.setItem('quizScores', JSON.stringify(scores));
+                loadLeaderboard();
+                document.getElementById('adminMessage').innerHTML = '<span class="success">All scores have been reset</span>';
+                
+                setTimeout(() => {
+                    document.getElementById('adminMessage').innerHTML = '';
+                }, 3000);
+            }
+        }
+
+        // Initialize app
+        showLogin();
+    </script>
+</body>
+</html>
